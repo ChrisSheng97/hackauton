@@ -106,12 +106,50 @@ for patient in overdose:
     # del synthetic[ID]
 
 print(overdose)
-    
-# with open('synthetic.csv', 'wb') as csvfile:
-#     writer = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-#     for i in range(0, train_total):
-#         row = data[i]
-#         writer.writerow([row['HR'], row['RR'], row['SPO2'], row['length'], row['pos_count'], row['neg_count']])
+
+top_drugs = ['Heroin', 'Fentanyl', 'Cocaine', 'Alcohol', 'Alprazolam', 'Oxycodone']
+races = ['Unknown', 'Middle Eastern', 'Hispanic', 'Black', 'Asian', 'White']
+languages = ['English', 'Icelandic', 'Unknown', 'Spanish']
+MaritalStatus = ['Single', 'Married', 'Divorced', 'Separated', 'Unknown', 'Widowed']
+with open('synthetic.csv', 'w') as csvfile:
+    writer = csv.writer(csvfile, delimiter=' ')
+    for row in overdose:
+        drugs = [0,0,0,0,0,0,0]
+        race = [0,0,0,0,0,0,0]
+        language = [0,0,0,0]
+        marital = [0,0,0,0,0,0,0]
+
+        for drug in row['Overdoses']:
+            if drug in top_drugs:
+                idx = top_drugs.index(drug)
+                drugs[idx] = 1
+            else:
+                drugs[6] = 1
+
+        if row['Sex'] == 'Female':
+            gender = 1
+        else: gender = 0
+
+        race_idx = races.index(row['Race'])
+        race[race_idx] = 1
+
+        language_idx = languages.index(row['Language'])
+        language[language_idx] = 1
+
+        marital_idx = MaritalStatus.index(row['MaritalStatus'])
+        marital[marital_idx] = 1
+
+        # languages[row['Language']] = True
+        # MaritalStatus[row['MaritalStatus']] = True
+
+        print(row['Age'], gender, race, drugs, 
+                        row['DaysOfStay'], marital, language, 
+                        row['PercentBelowPoverty'])
+
+        writer.writerow([row['Age'], row['Sex'], row['Race'], row['Overdoses'], 
+                        row['DaysOfStay'], marital, language,
+                        row['PercentBelowPoverty']])
+# print(languages, MaritalStatus)
 
 
 
