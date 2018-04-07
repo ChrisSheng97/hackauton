@@ -65,8 +65,9 @@ def sort_important_doses(num_rank, data_list):
 
 if __name__ == "__main__":
     # 2015
-    data, num_patients = process_opioid_table(['fatal_accidental_od_2015.csv'])
-    sort_important_doses(important_rank, [data])
+    data, num_patients = process_opioid_table(['fatal_accidental_od_2015.csv','fatal_accidental_od_2016.csv'])
+    all_kinds, selected, percentage = sort_important_doses(important_rank, [data])
+    print(selected)
 
 
 
