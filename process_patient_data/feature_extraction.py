@@ -77,7 +77,6 @@ def _encode_dose_target(matched_data_list, matched_data):
                 d_cats[selected.index(d)] += 1
         all_encodings.append(d_cats)
     return selected, all_encodings
-    
 
 def _general_encoding(matched_data_list, features_list):
     # generate features categories
@@ -134,4 +133,4 @@ def _encode_diagnose(matched_data_list):
     return res
 
 if __name__ == "__main__":
-    extract_features()
+    all_encodings, target_encoding = extract_features()
