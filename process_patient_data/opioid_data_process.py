@@ -9,7 +9,11 @@ def process_opioid_table(list_table):
     for table_loc in list_table:
         with open(table_loc, 'rb') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',')
+            header = True
             for row in spamreader:
+                if header:
+                    header = False
+                    continue
                 this_patient_data = {}
                 this_patient_data['death_date'] = row[0]
                 this_patient_data['death_time'] = row[1]
@@ -19,8 +23,8 @@ def process_opioid_table(list_table):
                     manner = 1
                 this_patient_data['manner'] = manner
                 this_patient_data['age'] = row[3]
-                this_patient_data['sex'] = row[4]
-                this_patient_data['gender'] = row[5]
+                this_patient_data['gender'] = row[4]
+                this_patient_data['race'] = row[5]
                 this_patient_data['case_dispo'] = row[6]
                 # 7 ~ 13 (inclusive) 7 kinds of doses
                 this_patient_data['doses'] = []
@@ -61,7 +65,7 @@ def sort_important_doses(num_rank, data_list):
 
 if __name__ == "__main__":
     # 2015
-    data, num_patients = process_opioid_table(['fatal_accidental_od_2015.csv','fatal_accidental_od_2016.csv'])
+    data, num_patients = process_opioid_table(['fatal_accidental_od_2015.csv'])
     sort_important_doses(important_rank, [data])
 
 

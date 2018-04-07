@@ -18,10 +18,17 @@ list_opioid_table = ['fatal_accidental_od_2008.csv',
 def match_data(list_opioid_table, patient_tables):
     # process opioid table first
     opioid_data, num_opioid_patients = opi_process.process_opioid_table(list_opioid_table)
+    print(opioid_data)
     # process patient_table
     patient_data = pd_process.process()
-    print(patient_data)
-
+    races = {}
+    for pd in opioid_data:
+        the_race = opioid_data[pd]['race']
+        if not the_race in races:
+            races[the_race] = 1
+        else:
+            races[the_race] += 1
+    print(races)
 
 
 
