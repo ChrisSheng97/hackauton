@@ -4,7 +4,7 @@ patient_core_populated_table_loc = 'PatientCorePopulatedTable.txt'
 admission_diagnose_core_populated_table_loc = 'AdmissionsDiagnosesCorePopulatedTable.txt'
 admission_core_populated_table_loc = 'AdmissionsCorePopulatedTable.txt'
 
-def process_patient_core_populated_table(table_loc):
+def _process_patient_core_populated_table(table_loc):
     file = open(table_loc, 'r')
     head = True
     data = {}
@@ -24,7 +24,7 @@ def process_patient_core_populated_table(table_loc):
         data[this_patient_id] = this_patient
     return data
 
-def process_admission_diagnose_core_populated_table(table_loc):
+def _process_admission_diagnose_core_populated_table(table_loc):
     file = open(table_loc, 'r')
     head = True
     data = {}
@@ -44,7 +44,7 @@ def process_admission_diagnose_core_populated_table(table_loc):
             data[this_patient_id] = p_data
     return data
 
-def process_admission_core_populated_table(table_loc):
+def _process_admission_core_populated_table(table_loc):
     file = open(table_loc, 'r')
     head = True
     data = {}
@@ -65,7 +65,7 @@ def process_admission_core_populated_table(table_loc):
             data[this_patient_id] = p_data
     return data
 
-def join_all_data(p_core, p_diag, p_admission):
+def _join_all_data(p_core, p_diag, p_admission):
     data = deepcopy(p_core)
     for patient_id in data:
         diag = p_diag[patient_id]
@@ -75,11 +75,9 @@ def join_all_data(p_core, p_diag, p_admission):
         p_data['admission_dates'] = admission
     return data
 
-def main():
-    p_core = process_patient_core_populated_table(patient_core_populated_table_loc)
-    p_diag = process_admission_diagnose_core_populated_table(admission_diagnose_core_populated_table_loc)
-    p_admission = process_admission_core_populated_table(admission_core_populated_table_loc)
-    join_all_data(p_core, p_diag, p_admission)
-
-if __name__ == "__main__":
-    main()
+def process():
+    p_core = _process_patient_core_populated_table(patient_core_populated_table_loc)
+    p_diag = _process_admission_diagnose_core_populated_table(admission_diagnose_core_populated_table_loc)
+    p_admission = _process_admission_core_populated_table(admission_core_populated_table_loc)
+    data = _join_all_data(p_core, p_diag, p_admission)
+    return data

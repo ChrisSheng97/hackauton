@@ -19,7 +19,8 @@ def match_data(list_opioid_table, patient_tables):
     # process opioid table first
     opioid_data, num_opioid_patients = opi_process.process_opioid_table(list_opioid_table)
     # process patient_table
-
+    patient_data = pd_process.process()
+    print(patient_data)
 
 
 
