@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 patient_core_populated_table_loc = 'PatientCorePopulatedTable.txt'
 admission_diagnose_core_populated_table_loc = 'AdmissionsDiagnosesCorePopulatedTable.txt'
 admission_core_populated_table_loc = 'AdmissionsCorePopulatedTable.txt'
@@ -64,13 +66,20 @@ def process_admission_core_populated_table(table_loc):
     return data
 
 def join_all_data(p_core, p_diag, p_admission):
-    
-
+    data = deepcopy(p_core)
+    for patient_id in data:
+        diag = p_diag[patient_id]
+        admission = p_admission[patient_id]
+        p_data = data[patient_id]
+        p_data['diagnose'] = diag
+        p_data['admission_dates'] = admission
+    return data
 
 def main():
     p_core = process_patient_core_populated_table(patient_core_populated_table_loc)
     p_diag = process_admission_diagnose_core_populated_table(admission_diagnose_core_populated_table_loc)
     p_admission = process_admission_core_populated_table(admission_core_populated_table_loc)
+    join_all_data(p_core, p_diag, p_admission)
 
 if __name__ == "__main__":
     main()
