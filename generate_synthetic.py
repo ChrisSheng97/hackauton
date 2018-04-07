@@ -2,13 +2,15 @@ import csv
 import random
 from datetime import date
 
-admissions = []
-basics = []
 overdose = []
-synthetic = []
+synthetic = {}
 
 AdmissionsCorePopulatedTable = open("./Data/10000-Patients/AdmissionsCorePopulatedTable.txt","r")
+isHead = True
 for line in AdmissionsCorePopulatedTable:
+    if isHead:
+        isHead = False
+        continue
     fields = line.split("\t")
     PatientID = fields[0]
     AdmissionID = fields[1]
@@ -23,12 +25,19 @@ for line in AdmissionsCorePopulatedTable:
     d0 = date(start_yr, start_month, start_date)
     d1 = date(end_yr, end_month, end_date)
     DaysOfStay = (d1 - d0).days
-    admissions.append({'PatientID': PatientID, 'AdmissionID': AdmissionID, 'DaysOfStay': DaysOfStay})
-random.shuffle(admissions)
+
+    synthetic[PatientID] = {'DaysOfStay': DaysOfStay}
+
 AdmissionsCorePopulatedTable.close()
+# print(synthetic)
+
 
 PatientCorePopulateTable = open("./Data/10000-Patients/PatientCorePopulatedTable.txt","r")
+isHead = True
 for line in PatientCorePopulateTable:
+    if isHead:
+        isHead = False
+        continue
     fields = line.split("\t")
     PatientID = fields[0]
     Gender = fields[1]
@@ -37,32 +46,67 @@ for line in PatientCorePopulateTable:
     Race = fields[3]
     MaritalStatus = fields[4]
     Language = fields[5]
-    PercentBelowPoverty = fields[6]
-    basics.append({'PatientID': PatientID, 'Gender': Gender, 'Age': Age, 'Race': Race, 'MaritalStatus': MaritalStatus,
-                    'Language': Language, 'PercentBelowPoverty': PercentBelowPoverty})
-random.shuffle(basics)
+    PercentBelowPoverty = float(fields[6][:-1])/100
+
+    data = {'Gender': Gender, 'Age': Age, 'Race': Race, 'MaritalStatus': MaritalStatus,
+                    'Language': Language, 'PercentBelowPoverty': PercentBelowPoverty}
+    for features in data:
+        synthetic[PatientID][features] = data[features]
+
 PatientCorePopulateTable.close()
+# print(synthetic)
+
 
 yrs = [i for i in range(2009, 2018)]
 filename = ['fatal_accidental_od_%d.csv'%i for i in yrs]
+num_patients = 0
+total_age = 0
 for f in filename:
     with open('./Data/allegheny/%s'%f) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
+            num_patients += 1
             overdoses = []
             for i in range(1, 8):
                 col_name = 'Combined OD%d'%i
                 if len(row[col_name]) > 0:
                     overdoses.append(row[col_name])
-            overdose.append({'DeathTime': row['Death Time'], 'Manner of Death': row['Manner of Death'],
-                'Age': row['Age'], 'Sex': row['Sex'], 'Race': row['Race'], 'CaseYear': row['Case Year'],
-                            'Overdoses': overdoses})
+            # 'CaseYear': row['Case Year'],
+            # 'DeathTime': row['Death Time']
+            # 'Manner of Death': row['Manner of Death'],
+            if row['Age'] == '':
+                row['Age'] = -1
+            else:
+                total_age += int(row['Age'])
+            overdose.append({'Age': int(row['Age']), 'Sex': row['Sex'], 'Race': row['Race'], 'Overdoses': overdoses})
+avg_age = total_age/num_patients
+for patient in overdose:
+    if patient['Age'] == -1:
+        patient['Age'] = avg_age
 
-    random.shuffle(overdose)
-    print(overdose)
+# print(overdose)
 
-# synthetic
+# overdose: 'Age': 55, 'Sex': 'Female', 'Race': 'White', 'Overdoses': ['Heroin', 'Fentanyl']
 
+# synthetic: '7D6CA213-A8E8-4F92-9D1F-1BEDBE421CE0': {'DaysOfStay': 4, 'Gender': 'Male', 'Age': 64, 'Race': 'White', 'MaritalStatus': 'Widowed', 'Language': 'English', 'PercentBelowPoverty': 0.9293}
+
+
+for patient in overdose:
+    similar_patients = []
+    for patientID in synthetic:
+        # print(synthetic[patientID]['Gender'], synthetic[patientID]['Race'], synthetic[patientID]['Age'])
+        if (synthetic[patientID]['Gender'] == patient['Sex'] and 
+                    (synthetic[patientID]['Race'] == patient['Race'] or synthetic[patientID]['Race'] == 'Unknown') and 
+                    abs(synthetic[patientID]['Age'] - patient['Age']) <= 100):
+            similar_patients.append(patientID)
+    match_ID = random.choice(similar_patients)
+    # print(synthetic[match_ID])
+    for features in synthetic[match_ID]:
+        patient[features] = synthetic[match_ID][features]
+    # del synthetic[ID]
+
+print(overdose)
+    
 # with open('synthetic.csv', 'wb') as csvfile:
 #     writer = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 #     for i in range(0, train_total):
