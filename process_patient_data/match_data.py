@@ -26,7 +26,11 @@ def match_data(output='matched_samples.json'):
     def get_dob_year(dob_str):
         return dob_str.split('-')[0]
     opioid_data = deepcopy(opioid_data_)
+    counter = 0
     for p_id in opioid_data_:
+        counter += 1
+        if counter == 100:
+            break
         opioid_patient = opioid_data[p_id]
         similar_patients_ = {k : v for k , v in patient_data.iteritems() \
                              if (v['gender'] == opioid_patient['gender'] or v['gender'].lower() == 'unknown') \
@@ -46,8 +50,4 @@ def match_data(output='matched_samples.json'):
     # write into a json file
     with open(output, 'w') as fp:
         fp.write(json.dumps(opioid_data, indent=4))
-    return opioid_data
-
-if __name__ == "__main__":
-    match_data()
-
+    return opioid_data_, patient_data, opioid_data
