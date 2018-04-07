@@ -63,6 +63,9 @@ def process_admission_core_populated_table(table_loc):
             data[this_patient_id] = p_data
     return data
 
+def join_all_data(p_core, p_diag, p_admission):
+    
+
 
 def main():
     p_core = process_patient_core_populated_table(patient_core_populated_table_loc)
