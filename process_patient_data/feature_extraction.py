@@ -72,9 +72,9 @@ def _encode_dose_target(matched_data_list, matched_data):
         d_cats = [0 for i in range(len(selected) + 2)]
         for d in doses:
             if not d in selected:
-                d_cats[len(selected)] += 1
+                d_cats[len(selected)] = 1
             else:
-                d_cats[selected.index(d)] += 1
+                d_cats[selected.index(d)] = 1
         all_encodings.append(d_cats)
     return selected, all_encodings
 
@@ -88,7 +88,6 @@ def _general_encoding(matched_data_list, features_list):
             certain_feature = data[feature]
             if not certain_feature in all_features_cats[feature]:
                 all_features_cats[feature].append(certain_feature)
-    # print(all_features_cats)
     # encode feature categories
     all_features_res = {}
     for feature in features_list:
@@ -101,7 +100,6 @@ def _general_encoding(matched_data_list, features_list):
 
 def _encode_diagnose(matched_data_list):
     # encode directly according to ICD-10
-    # res = np.zeros((0, IDC_10_NUM))
     res = []
     def encode_icd_10(icd_str):
         fst = icd_str.split('.')[0]
@@ -122,13 +120,11 @@ def _encode_diagnose(matched_data_list):
         else:
             return 21
     for data in matched_data_list:
-        # p_diag_all_cats = np.zeros(IDC_10_NUM)
         p_diag_all_cats = [0 for i in range(IDC_10_NUM)]
         diag = data['diagnose']
         for d in diag:
             d_code = encode_icd_10(d)
             p_diag_all_cats[d_code] += 1
-        # res = np.vstack((res, p_diag_all_cats))
         res.append(p_diag_all_cats)
     return res
 

@@ -69,5 +69,3 @@ if __name__ == "__main__":
     all_kinds, selected, percentage = sort_important_doses(important_rank, [data])
     print(selected)
 
-
-
