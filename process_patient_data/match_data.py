@@ -1,6 +1,7 @@
+import random
+import json
 import opioid_data_process as opi_process
 import patient_data_process as pd_process
-import random
 from copy import deepcopy
 
 list_opioid_table = ['fatal_accidental_od_2008.csv',
@@ -17,7 +18,7 @@ list_opioid_table = ['fatal_accidental_od_2008.csv',
   :param list_opioid_table : a list of opioid data tables
   :param patient_tables : self defined patient tables
 """
-def match_data():
+def match_data(output='matched_samples.json'):
     # process opioid table first
     opioid_data_, num_opioid_patients = opi_process.process_opioid_table(list_opioid_table)
     # process patient_table
@@ -42,6 +43,9 @@ def match_data():
         for feature in patient_data[match_id]:
             opioid_data[p_id][feature] = patient_data[match_id][feature]
         patient_data.pop(match_id)
+    # write into a json file
+    with open(output, 'w') as fp:
+        fp.write(json.dumps(opioid_data, indent=4))
     return opioid_data
 
 if __name__ == "__main__":
