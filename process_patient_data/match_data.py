@@ -1,5 +1,6 @@
 import random
 import json
+import pickle
 import opioid_data_process as opi_process
 import patient_data_process as pd_process
 from copy import deepcopy
@@ -28,16 +29,13 @@ def match_data(output='matched_samples.json'):
     opioid_data = deepcopy(opioid_data_)
     counter = 0
     for p_id in opioid_data_:
-        counter += 1
-        if counter == 100:
-            break
         opioid_patient = opioid_data[p_id]
         similar_patients_ = {k : v for k , v in patient_data.iteritems() \
                              if (v['gender'] == opioid_patient['gender'] or v['gender'].lower() == 'unknown') \
                              and (opioid_patient['race'].lower() == v['race'].lower() or v['race'].lower() == 'unknown') \
-                             and ( v['dob'] == '' or opioid_patient['case_year'] == '' \
-                                   or opioid_patient['age'] == '' \
-                                   or (abs(int(get_dob_year(v['dob'])) - (int(opioid_patient['case_year']) - int(opioid_patient['age']))) <= 5))}
+                             and ( v['dob'] != '' and opioid_patient['case_year'] != '' \
+                                   and opioid_patient['age'] != '' \
+                                   and (abs(int(get_dob_year(v['dob'])) - (int(opioid_patient['case_year']) - int(opioid_patient['age']))) <= 3))}
         similar_patients = similar_patients_.keys()
         if len(similar_patients) == 0: # no similiar patients
             opioid_data.pop(p_id)
@@ -50,4 +48,11 @@ def match_data(output='matched_samples.json'):
     # write into a json file
     with open(output, 'w') as fp:
         fp.write(json.dumps(opioid_data, indent=4))
+    # save the matched data into a pickle
+    out_pkl = open('matched_data.pkl', 'wb')
+    pickle.dump(opioid_data, out_pkl)
+    out_pkl.close()
     return opioid_data_, patient_data, opioid_data
+
+if __name__ == "__main__":
+    match_data()
