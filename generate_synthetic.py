@@ -105,7 +105,9 @@ for patient in overdose:
         patient[features] = synthetic[match_ID][features]
     # del synthetic[ID]
 
-print(overdose)
+# print(overdose)
+
+output = []
 
 top_drugs = ['Heroin', 'Fentanyl', 'Cocaine', 'Alcohol', 'Alprazolam', 'Oxycodone']
 races = ['Unknown', 'Middle Eastern', 'Hispanic', 'Black', 'Asian', 'White']
@@ -142,14 +144,20 @@ with open('synthetic.csv', 'w') as csvfile:
         # languages[row['Language']] = True
         # MaritalStatus[row['MaritalStatus']] = True
 
-        print(row['Age'], gender, race, drugs, 
-                        row['DaysOfStay'], marital, language, 
-                        row['PercentBelowPoverty'])
+        result = []
+        for i in [row['Age'], gender, race, drugs, marital, language, 
+                        row['PercentBelowPoverty']]:
+            if (type(i) == list):
+                result = result + i
+            else:
+                result.append(i)
+        output.append(result)
 
-        writer.writerow([row['Age'], row['Sex'], row['Race'], row['Overdoses'], 
-                        row['DaysOfStay'], marital, language,
-                        row['PercentBelowPoverty']])
-# print(languages, MaritalStatus)
+        # print(row['Age'], gender, race, drugs, 
+        #                 row['DaysOfStay'], marital, language, 
+        #                 row['PercentBelowPoverty'])
 
+        writer.writerow(result)
 
-
+# add zipcode later
+print(output)
