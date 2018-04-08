@@ -6,12 +6,13 @@ import numpy as np
 
 IDC_10_NUM = 22
 num_rank = 6
+pickle_file_name = 'matched_data.pkl'
 
 def extract_features():
     num_rank = 6
     # opioid_data, patient_data, matched_data = md.match_data()
-    pkl_file = open('matched_data.pkl', 'rb')
-    matched_data = pickle.load(pkl_file)
+    pkl_file = open(pickle_file_name, 'rb')
+    _, _, matched_data = pickle.load(pkl_file)
     pkl_file.close()
     # all_kinds, selected, percentage = opi_process.sort_important_doses(num_rank, [opioid_data])
 
@@ -36,8 +37,10 @@ def extract_features():
     feature_cats, feature_encodings = _general_encoding(matched_data_list, general_features)
     # DIAGNOSE 2 d list
     diagnose_encodings = _encode_diagnose(matched_data_list)
+    # TODO: encode admissions as a discounted num days in hospital
+
     # ENCODE ALL IN THIS ORDER:
-    # age, poverty, diff_zip_code, case year(real number), manner (accident/accidents), 
+    # age, poverty, case year(real number), manner (accident/accidents), 
     # lang, marital_status, gender, race (categorical), diagnose
     def is_int(s):
         try: 
@@ -48,11 +51,7 @@ def extract_features():
     all_encodings = []
     for i in range(len(matched_data_list)):
         data = matched_data_list[i]
-        diff_zip = abs(int(data['decedent_zip']) - int(data['incident_zip'])) \
-            if is_int(data['decedent_zip']) and is_int(data['incident_zip']) \
-            else 0
-        p_encoding = [float(data['age']), float(data['poverty']), 
-                      diff_zip, 
+        p_encoding = [float(data['age']), float(data['poverty']),
                       float(data['case_year']), int(data['manner'])]
         for feature in general_features:
             p_encoding.append(feature_encodings[feature][i])
@@ -61,7 +60,7 @@ def extract_features():
 
     # encoding target/doses
     target_encoding = _encode_dose_target(matched_data_list, matched_data)
-    return all_encodings, target_encoding
+    return all_encodings, target_encoding    
 
 def _encode_dose_target(matched_data_list, matched_data):
     all_kinds, selected, percentage = opi_process.sort_important_doses(num_rank, [matched_data])

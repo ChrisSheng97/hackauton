@@ -8,7 +8,11 @@ def _process_patient_core_populated_table(table_loc):
     file = open(table_loc, 'r')
     head = True
     data = {}
+    counter = 0
     for line in file:
+        counter += 1
+        if counter > 10:
+            break
         if head:
             head = False
             continue
@@ -17,10 +21,16 @@ def _process_patient_core_populated_table(table_loc):
         this_patient_id = splited[0]
         this_patient['gender'] = splited[1]
         this_patient['dob'] = splited[2]
-        this_patient['race'] = splited[4]
-        this_patient['marital_status'] = splited[5]
-        this_patient['lang'] = splited[6]
-        this_patient['poverty'] = splited[7]
+        if splited[4].lower() == 'african':
+            this_patient['race'] = 'Black'
+            this_patient['marital_status'] = splited[6]
+            this_patient['lang'] = splited[7]
+            this_patient['poverty'] = splited[8]
+        else:
+            this_patient['race'] = splited[4]
+            this_patient['marital_status'] = splited[5]
+            this_patient['lang'] = splited[6]
+            this_patient['poverty'] = splited[7]
         data[this_patient_id] = this_patient
     return data
 
@@ -81,3 +91,6 @@ def process():
     p_admission = _process_admission_core_populated_table(admission_core_populated_table_loc)
     data = _join_all_data(p_core, p_diag, p_admission)
     return data
+
+if __name__ == "__main__":
+    process()
