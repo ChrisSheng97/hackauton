@@ -17,7 +17,7 @@ def main():
     # get training data
     # get OD data
     all_encodings, target_encoding = fe.extract_features(matched_data)
-    general_samples = ds.draw_general_sample(GEN_SAMPLE_NUM, patient_data)
+    general_samples = ds.draw_general_sample(GEN_SAMPLE_NUM, patient_data, 'age', [0.18])
     print(len(matched_data))
     print(len(general_samples))
     general_sample_encodings, general_sample_target_encoding = fe.extract_features(general_samples, True)
