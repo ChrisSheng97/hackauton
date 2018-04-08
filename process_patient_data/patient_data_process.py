@@ -8,11 +8,7 @@ def _process_patient_core_populated_table(table_loc):
     file = open(table_loc, 'r')
     head = True
     data = {}
-    counter = 0
     for line in file:
-        counter += 1
-        if counter > 10:
-            break
         if head:
             head = False
             continue

@@ -33,7 +33,6 @@ def match_data(output='matched_samples.json'):
         similar_patients_ = {k : v for k , v in patient_data.iteritems() \
                              if (v['gender'] == opioid_patient['gender'] or v['gender'].lower() == 'unknown') \
                              and (opioid_patient['race'].lower() == v['race'].lower() \
-                                or (opioid_patient['race'].lower() == 'black' and v['race'].lower() == 'african') \
                                 or v['race'].lower() == 'unknown') \
                              and ( v['dob'] != '' and opioid_patient['case_year'] != '' \
                                    and opioid_patient['age'] != '' \
@@ -48,10 +47,6 @@ def match_data(output='matched_samples.json'):
             if feature != 'race' and feature != 'gender':
                 opioid_data[p_id][feature] = patient_data[match_id][feature]
         patient_data.pop(match_id)
-    for p_id in opioid_data:
-        data = opioid_data[p_id]
-        if data['race'].lower() == 'african' or data['race'].lower() == 'black':
-            print(data)
     # file output
     # write into a json file
     with open(output, 'w') as fp:
@@ -60,6 +55,7 @@ def match_data(output='matched_samples.json'):
     out_pkl = open('matched_data.pkl', 'wb')
     pickle.dump((opioid_data_, patient_data, opioid_data), out_pkl)
     out_pkl.close()
+    print(len(opioid_data))
     return opioid_data_, patient_data, opioid_data
 
 if __name__ == "__main__":
