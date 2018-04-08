@@ -61,16 +61,16 @@ def draw_general_sample(num_samples, modified_patient_data, feature='gender', pe
         ASIAN = percent[2]
         OTHER = 1 - WHITE - BLACK - ASIAN
         # group patient data
-        white_need = num_samples * WHITE
-        black_need = num_samples * BLACK
-        asian_need = num_samples * ASIAN
-        other_need = num_samples * OTHER
+        white_need = int(num_samples * WHITE)
+        black_need = int(num_samples * BLACK)
+        asian_need = int(num_samples * ASIAN)
+        other_need = int(num_samples * OTHER)
         white, black, asian, other = _split_race(modified_patient_data)
         # get id
-        w_id = np.random.choice(list(white.keys()), elder_need)
-        b_id = np.random.choice(list(black.keys()), elder_need)
-        a_id = np.random.choice(list(asian.keys()), elder_need)
-        o_id = np.random.choice(list(other.keys()), elder_need)
+        w_id = np.random.choice(list(white.keys()), white_need)
+        b_id = np.random.choice(list(black.keys()), black_need)
+        a_id = np.random.choice(list(asian.keys()), asian_need)
+        o_id = np.random.choice(list(other.keys()), other_need)
         # get sample
         sample_chosen = {k : v for k, v in modified_patient_data.iteritems() if k in w_id or k in b_id or k in a_id or k in o_id}
     return sample_chosen
