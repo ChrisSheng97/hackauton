@@ -4,6 +4,12 @@ from keras.layers import Dense
 from keras.optimizers import Adam
 import numpy as np
 import csv
+from sklearn import metrics
+from sklearn.model_selection import KFold, StratifiedKFold
+
+kf = KFold(n_splits=10)
+# 90% CI, t distribution
+Z = 1.833
 
 # load dataset and split into train and test datasets
 # use 10-fild cross validation to train 
@@ -22,7 +28,7 @@ Y = np.array(Y)
 
 # model
 class NN():
-    def __init__(self, num_feature, lr=0.0001):
+    def __init__(self, num_feature, lr=0.000001):
         self.model = Sequential()
         self.model.add(Dense(32, input_shape=(num_feature,), activation='relu'))
         self.model.add(Dense(1, activation='softmax'))
@@ -32,9 +38,13 @@ class NN():
         self.scores = []
 
     def train(self):
-        for i in range(self.train_steps):
-            self.model.fit(X, Y)
-            score = self.model.evaluate(X, Y)
+        for train_index, test_index in kf.split(X):
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = Y[train_index], Y[test_index]
+
+            # for t in range(self.train_steps):
+            self.model.fit(X_train, y_train)
+            score = self.model.evaluate(X_test, y_test)
             print(score)
             self.scores.append(score)
 
