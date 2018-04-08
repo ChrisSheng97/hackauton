@@ -1,0 +1,25 @@
+Allegheny County population distribution:
+
+
+
+
+
+========================================================================================
+http://www.drugwarfacts.org/chapter/prevalence
+In 2016, 28.6 million people aged 12 or older used an illicit drug in the past 30 days, which corresponds to about 1 in 10 Americans overall (10.6 percent) but ranges as high as 1 in 4 for young adults aged 18 to 25. 
+
+drug user percentage in the US: 10.6 %
+assume drug user percentage in Allegheny County: 10.6%
+
+https://www.census.gov/quickfacts/fact/table/alleghenycountypennsylvania/PST045216
+Allegheny County population in 2016: 1,225,365
+implicit drug users in Allegheny County: 1,225,365 * 10.6% = 129,888
+
+https://www.overdosefreepa.pitt.edu/wp-content/uploads/2017/07/DEA-Analysis-of-Overdose-Deaths-in-Pennsylvania-2016.pd_-1.pdf
+(page 11)
+number of death due to OD in in Allegheny County: 4,642 
+percentage of OD death in Allegheny County: 3.57%
+
+(page 20)
+OD death age distribution: 30% 25~34, 25~34+45~54+35~44 40% PA population 75% OD death, 15~24 14% PA population, 10% OD death
+OD death gender:
