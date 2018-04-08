@@ -55,7 +55,6 @@ def match_data(output='matched_samples.json'):
     out_pkl = open('matched_data.pkl', 'wb')
     pickle.dump((opioid_data_, patient_data, opioid_data), out_pkl)
     out_pkl.close()
-    print(len(opioid_data))
     return opioid_data_, patient_data, opioid_data
 
 if __name__ == "__main__":
