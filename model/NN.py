@@ -10,16 +10,11 @@ import csv
 
 X = []
 Y = []
-with open('synthetic.csv', 'r') as csvfile:
+with open('synthetic_encoded.csv', 'r') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
-        
-        row[0] = row[0].split(' ')
-        for i in range(len(row[0])):
-            row[0][i] = float(row[0][i])
-        row = row[0]
-        X.append(row[:-7])
-        Y.append(row[-7:])
+        X.append(row[:-1])
+        Y.append(row[-1])
         print(row)
 
 X = np.array(X)
@@ -30,7 +25,7 @@ class NN():
     def __init__(self, num_feature, lr=0.0001):
         self.model = Sequential()
         self.model.add(Dense(32, input_shape=(num_feature,), activation='relu'))
-        self.model.add(Dense(7, activation='softmax'))
+        self.model.add(Dense(1, activation='softmax'))
         self.model.compile(loss='binary_crossentropy', optimizer=Adam(lr = lr), metrics=['accuracy'])
 
         self.train_steps = 1000
@@ -38,19 +33,19 @@ class NN():
 
     def train(self):
         for i in range(self.train_steps):
-            self.model.fit(X, Y, epochs=1, batch_size=32)
+            self.model.fit(X, Y)
             score = self.model.evaluate(X, Y)
             print(score)
             self.scores.append(score)
 
-    def predict(self):
-        predictions = self.model.predict(X)
-        print(predictions)
+    # def predict(self):
+    #     predictions = self.model.predict(X)
+    #     print(predictions)
 
 def main(args): 
-    model = NN(21)
+    model = NN(30)
     model.train()
-    model.predict()
+    # model.predict()
 
 if __name__ == '__main__':
     main(sys.argv)
