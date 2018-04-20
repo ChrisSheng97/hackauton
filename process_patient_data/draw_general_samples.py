@@ -11,7 +11,6 @@ FEMALE_PERCENT = 0.517 # 4327
 # BELOW_18 = 0.189 # 0
 OVER_65_PERCENT = 0.18 # 4353
 # OTHER = 0.631 # 3108
-# ===>>>>
 OTHER = 0.82
 # race
 WHITE = 0.805 # 3184
@@ -105,13 +104,6 @@ def _split_age(single_group):
             elder[pid] = data
         else:
             adult[pid] = data
-        # birth_year = int(data['dob'].split('-')[0])
-        # if CURR_YEAR - birth_year < 18:
-        #     young[pid] = data
-        # elif CURR_YEAR - birth_year > 65:
-        #     elder[pid] = data
-        # else:
-        #     adult[pid] = data
     return adult, elder
 
 def _split_race(single_group):
@@ -133,8 +125,4 @@ def _split_race(single_group):
 
 if __name__ == "__main__":
     draw_general_sample(2000)
-
-
-
-
 

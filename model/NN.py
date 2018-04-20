@@ -40,9 +40,6 @@ class NN():
 
             # for t in range(self.train_steps):
             self.model.fit(X_train, y_train)
-            # score = self.model.evaluate(X_test, y_test)
-            # print(score)
-            # self.scores.append(score)
             self.predict(X_test, y_test)
     
     def predict(self, X_test, y_test):
@@ -65,10 +62,7 @@ class NN():
                 accur.append(1)
             else:
                 accur.append(0)
-        # print(len(accur))
-        # print(prediction)
         acc = float(np.sum(np.array(accur))) / float(len(accur))
-        # print('accuracy: {}'.format(acc))
 
 class Bin_NN():
     def __init__(self, X, Y, lr=0.0001):
@@ -94,39 +88,36 @@ class Bin_NN():
 
             # for t in range(self.train_steps):
             self.model.fit(X_train, y_train)
-            # score = self.model.evaluate(X_test, y_test)
-            # print(score)
-            # self.scores.append(score)
+            score = self.model.evaluate(X_test, y_test)
+            self.scores.append(score)
 
-    # def gen_rand_test_data(self, num_test):
-    #     X_ = copy.deepcopy(self.X)
-    #     Y_ = copy.deepcopy(self.Y)
-    #     X_test = np.random.choice(X_.flatten(), num_test)
-    #     y_test = np.random.choice(Y_.flatten(), num_test)
-    #     self.predict(X_test, y_test)
+    def gen_rand_test_data(self, num_test):
+        X_ = copy.deepcopy(self.X)
+        Y_ = copy.deepcopy(self.Y)
+        X_test = np.random.choice(X_.flatten(), num_test)
+        y_test = np.random.choice(Y_.flatten(), num_test)
+        self.predict(X_test, y_test)
 
-    # def predict(self, X_test, y_test):
-    #     prediction = self.model.predict(X_test)
-    #     bin_prediction = []
-    #     for pred in prediction:
-    #         if pred[-1] > 0.5: # yes, OD
-    #             bin_prediction.append(1)
-    #         else:
-    #             bin_prediction.append(0)
-    #     test_pred = []
-    #     for y_t in y_test:
-    #         if y_t[-1] == 0: # yes, OD
-    #             test_pred.append(1)
-    #         else:
-    #             test_pred.append(0)
-    #     accur = []
-    #     for i in range(len(bin_prediction)):
-    #         if bin_prediction[i] == test_pred[i]:
-    #             accur.append(1)
-    #         else:
-    #             accur.append(0)
-    #     # print(len(accur))
-    #     # print(prediction)
-    #     acc = float(np.sum(np.array(accur))) / float(len(accur))
-    #     print('accuracy: {}'.format(acc))
+    def predict(self, X_test, y_test):
+        prediction = self.model.predict(X_test)
+        bin_prediction = []
+        for pred in prediction:
+            if pred[-1] > 0.5: # yes, OD
+                bin_prediction.append(1)
+            else:
+                bin_prediction.append(0)
+        test_pred = []
+        for y_t in y_test:
+            if y_t[-1] == 0: # yes, OD
+                test_pred.append(1)
+            else:
+                test_pred.append(0)
+        accur = []
+        for i in range(len(bin_prediction)):
+            if bin_prediction[i] == test_pred[i]:
+                accur.append(1)
+            else:
+                accur.append(0)
+        acc = float(np.sum(np.array(accur))) / float(len(accur))
+        print('accuracy: {}'.format(acc))
 

@@ -26,10 +26,6 @@ class RF():
     def train(self):
         for i in range(self.train_steps):
             self.clf.fit(X, Y)
-            # clf = self.clf.fit(X, Y)
-            # for tree in clf.estimators_:
-            #     export_graphviz(tree, out_file='tree.dot')
-
             score = self.clf.score(X, Y)
             print(score)
             self.scores.append(score)

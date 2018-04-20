@@ -29,8 +29,6 @@ for line in AdmissionsCorePopulatedTable:
     synthetic[PatientID] = {'DaysOfStay': DaysOfStay}
 
 AdmissionsCorePopulatedTable.close()
-# print(synthetic)
-
 
 PatientCorePopulateTable = open("./Data/10000-Patients/PatientCorePopulatedTable.txt","r")
 isHead = True
@@ -54,9 +52,6 @@ for line in PatientCorePopulateTable:
         synthetic[PatientID][features] = data[features]
 
 PatientCorePopulateTable.close()
-# print(synthetic)
-
-
 yrs = [i for i in range(2009, 2018)]
 filename = ['fatal_accidental_od_%d.csv'%i for i in yrs]
 num_patients = 0
@@ -71,9 +66,6 @@ for f in filename:
                 col_name = 'Combined OD%d'%i
                 if len(row[col_name]) > 0:
                     overdoses.append(row[col_name])
-            # 'CaseYear': row['Case Year'],
-            # 'DeathTime': row['Death Time']
-            # 'Manner of Death': row['Manner of Death'],
             if row['Age'] == '':
                 row['Age'] = -1
             else:
@@ -84,28 +76,17 @@ for patient in overdose:
     if patient['Age'] == -1:
         patient['Age'] = avg_age
 
-# print(overdose)
-
-# overdose: 'Age': 55, 'Sex': 'Female', 'Race': 'White', 'Overdoses': ['Heroin', 'Fentanyl']
-
-# synthetic: '7D6CA213-A8E8-4F92-9D1F-1BEDBE421CE0': {'DaysOfStay': 4, 'Gender': 'Male', 'Age': 64, 'Race': 'White', 'MaritalStatus': 'Widowed', 'Language': 'English', 'PercentBelowPoverty': 0.9293}
-
 
 for patient in overdose:
     similar_patients = []
     for patientID in synthetic:
-        # print(synthetic[patientID]['Gender'], synthetic[patientID]['Race'], synthetic[patientID]['Age'])
         if (synthetic[patientID]['Gender'] == patient['Sex'] and 
                     (synthetic[patientID]['Race'] == patient['Race'] or synthetic[patientID]['Race'] == 'Unknown') and 
                     abs(synthetic[patientID]['Age'] - patient['Age']) <= 100):
             similar_patients.append(patientID)
     match_ID = random.choice(similar_patients)
-    # print(synthetic[match_ID])
     for features in synthetic[match_ID]:
         patient[features] = synthetic[match_ID][features]
-    # del synthetic[ID]
-
-# print(overdose)
 
 output = []
 
@@ -141,9 +122,6 @@ with open('synthetic.csv', 'w') as csvfile:
         marital_idx = MaritalStatus.index(row['MaritalStatus'])
         marital[marital_idx] = 1
 
-        # languages[row['Language']] = True
-        # MaritalStatus[row['MaritalStatus']] = True
-
         result = []
         for i in [row['Age'], gender, race, drugs, marital, language, 
                         row['PercentBelowPoverty']]:
@@ -152,12 +130,4 @@ with open('synthetic.csv', 'w') as csvfile:
             else:
                 result.append(i)
         output.append(result)
-
-        # print(row['Age'], gender, race, drugs, 
-        #                 row['DaysOfStay'], marital, language, 
-        #                 row['PercentBelowPoverty'])
-
         writer.writerow(result)
-
-# add zipcode later
-print(output)

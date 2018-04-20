@@ -9,31 +9,6 @@ num_rank = 6
 pickle_file_name = 'matched_data.pkl'
 
 def extract_features(matched_data, is_general=False):
-    
-    # all_kinds, selected, percentage = opi_process.sort_important_doses(num_rank, [opioid_data])
-
-    # matched_data
-    # 2864: {'lang': 'English', 'diagnose': ['D30.21', 'M05.471', 'F68.11'], 
-    #        'marital_status': 'Separated', 
-    #        'case_dispo': 'MO', 'dob': '1968-09-22', 
-    #        'gender': 'Female', 'age': '51', 
-    #        'death_date': '12/31/2016', 
-    #        'admission_dates': [('1987-03-04', '1987-03-16'), ('1990-11-11', '1990-11-25'), 
-    #                            ('2012-08-04', '2012-08-11')], 
-    #        'id': '82302D3A-D763-4930-8DDD-98B84124E7FD', 
-    #        'case_year': '2016', 'race': 'Unknown', 
-    #        'poverty': '14.38', 'manner': 0, 
-    #        'doses': ['Citalopram/Escitalopram', 'Cocaine', 'Fentanyl'], 
-    #        'death_time': '02:26 AM', 'decedent_zip': '15206', 'incident_zip': '15206'}
-
-    # {'lang': 'English', 'diagnose': ['C92.0', 'G44.1', 'C16.3', 'B57.42', 'E09.331'],
-    #          'dob': '1963-06-07', 'gender': 'Male', 
-    #          'marital_status': 'Married', 
-    #          'race': 'Asian', 'poverty': '3.1', 
-    #          'admission_dates': [('1982-09-12', '1982-09-25'), 
-    #                              ('2003-02-26', '2003-03-16'), ('2007-04-13', '2007-04-20'), 
-    #                              ('2007-04-27', '2007-05-06'), ('2012-10-04', '2012-10-17')]}
-
     # encoding features 
     matched_data_list = matched_data.values()
     general_features = ['lang', 'marital_status', 'gender', 'race']
@@ -142,7 +117,6 @@ def _encode_diagnose(matched_data_list):
     return res
 
 if __name__ == "__main__":
-    # opioid_data, patient_data, matched_data = md.match_data()
     pkl_file = open(pickle_file_name, 'rb')
     _, _, matched_data = pickle.load(pkl_file)
     pkl_file.close()

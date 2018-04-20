@@ -31,14 +31,18 @@ def main():
     # create X and Y
     X = all_encodings
     X.extend(general_sample_encodings)
+    # for categorical prediciton
     # Y = target_encoding
     # Y.extend(general_sample_target_encoding)
+    # for binardy prediction Overdose vs non-Overdose
     Y = bin_target_encoding
     Y.extend(bin_general_sample_target_encoding)
     print(Y)
     # build NN model
+    # for categorical prediction
     # nn_model = nn.NN(X, Y)
     # nn_model.train()
+    # for binary prediction
     nn_model = nn.Bin_NN(X, Y)
     nn_model.train()
 
