@@ -1,8 +1,8 @@
 # Proceedings to HackAuton 2018
-# Interactive Exploration of Opioid Overdose
+# Characterizing Allegheny Opioid Overdoses
 ## Authors
-* Theresa Gebert (tgebert@andrew.cmu.edu)
+* Theresa Gebert (theresa@stat.cmu.edu)
 * Chris Jiaxian Sheng (jiaxians@andrew.cmu.edu)
 * Shuli Jiang (shulij@andrew.cmu.edu)
 
-## See our paper at : 
+## See our paper at: 
