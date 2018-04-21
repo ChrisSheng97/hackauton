@@ -8,9 +8,9 @@ def process_opioid_table(list_table):
     data = {}
     for table_loc in list_table:
         with open(table_loc, 'rb') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=',')
+            data_reader = csv.reader(csvfile, delimiter=',')
             header = True
-            for row in spamreader:
+            for row in data_reader:
                 if header:
                     header = False
                     continue
