@@ -28,6 +28,8 @@ class Bin_NN():
 
         self.train_steps = 1000
         self.accuracy = []
+        self.false_positive_rate = []
+        self.false_negative_rate = []
 
     def train(self):
         for train_index, test_index in kf.split(self.X):
@@ -37,9 +39,13 @@ class Bin_NN():
             self.X_test = X_test
             self.y_test = y_test
             self.model.fit(X_train, y_train)
-            acc = self.selfeval(X_test, y_test)
+            acc, fp, fn = self.selfeval(X_test, y_test)
             self.accuracy.append(acc)
+            self.false_positive_rate.append(fp)
+            self.false_negative_rate.append(fn)
         print('avg accuracy : {}'.format(np.mean(np.array(self.accuracy))))
+        print('avg false positive rate : {}'.format(np.mean(np.array(self.false_positive_rate))))
+        print('avg false negative rate : {}'.format(np.mean(np.array(self.false_negative_rate))))
 
     def gen_rand_test_data(self, num_test):
         X_ = copy.deepcopy(self.X)
@@ -63,13 +69,24 @@ class Bin_NN():
                 target.append(1)
             else:
                 target.append(0)
+        false_positives_num = 0
+        false_negatives_num = 0
+        for i in range(len(prediction)):
+            if my_pred[i] == 1 and target[i] == 0:
+                false_positives_num += 1
+            if my_pred[i] == 0 and target[i] == 1:
+                false_negatives_num += 1
         my_pred = np.array(my_pred)
         target = np.array(target)
         num_cor = float(len(np.where(my_pred == target)[0]))
         num_total = float(len(y_test))
         acc = num_cor / num_total
+        false_positive_rate = float(false_positives_num) / num_total
+        false_negative_rate = float(false_negatives_num) / num_total
         print('accuracy: {}'.format(acc))
-        return acc
+        print('false positive rate : {}'.format(false_positive_rate))
+        print('false negative rate: {}'.format(false_negative_rate))
+        return acc, false_positive_rate, false_negative_rate
 
 # model -- not tuned, outdated
 class NN():
