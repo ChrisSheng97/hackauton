@@ -5,4 +5,4 @@
 * Chris Jiaxian Sheng (jiaxians@andrew.cmu.edu)
 * Shuli Jiang (shulij@andrew.cmu.edu)
 
-## See our paper at: 
+## See our paper at: https://arxiv.org/abs/1804.08830
